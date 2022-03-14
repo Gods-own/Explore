@@ -9,6 +9,7 @@ export default {
     name: 'Button',
     methods: {
         onClick(e) {
+            e.stopImmediatePropagation();
             this.$emit('click', e)
         }
     }

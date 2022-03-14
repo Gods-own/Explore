@@ -16,12 +16,16 @@ const actions = {
 
         commit('setPhotos', response.data)
     },
-    async addPhoto({ commit }, albumId, title, url) {
+    async addPhoto({ commit }, {title, url, albumId}) {
         const response = await axios.post(
-            `https://jsonplaceholder.typicode.com/albums/${albumId}/photos`,
+            `https://jsonplaceholder.typicode.com/photos`,
 
-            { albumId, title, url }
+            { title, url, albumId }
         );
+
+        console.log(albumId)
+
+        console.log(response.data)
 
         commit('newPhoto', response.data);
     }

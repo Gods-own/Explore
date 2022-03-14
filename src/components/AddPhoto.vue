@@ -29,7 +29,13 @@ export default {
         ...mapActions(['addPhoto']),
         onSubmit(e) {
             e.preventDefault();
-            this.addPhoto(this.albumId, this.title, this.photoUrl);
+            console.log(typeof this.albumId);
+            console.log(this.title);
+            console.log(typeof parseInt(this.albumId));
+            const payload = {title: this.title, url: this.photoUrl, albumId: parseInt(this.albumId)}
+            this.addPhoto(payload);
+            this.title = '';
+            this.photoUrl = '';
         }
     }
 }
