@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Users from '../views/Users.vue'
 import Albums from '../views/Albums.vue'
 import Photos from '../views/Photos.vue'
+import LikedPhotos from '../views/LikedPhotos.vue'
 
 const routes = [{
         path: '/',
@@ -23,6 +24,11 @@ const routes = [{
         path: '/album-photos/:albumId',
         name: 'AlbumPhotos',
         component: Photos
+    },
+    {
+        path: '/favourite-photos',
+        name: 'FavouritePhotos',
+        component: LikedPhotos
     }
 ]
 

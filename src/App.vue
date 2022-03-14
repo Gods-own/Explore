@@ -1,7 +1,8 @@
 <template>
   <nav>
     <router-link :to="{ name: 'Home' }">Home</router-link> |
-    <router-link :to="{ name: 'Users' }">Users</router-link>
+    <router-link :to="{ name: 'Users' }">Users</router-link> |
+    <router-link :to="{ name: 'FavouritePhotos' }">Favourites</router-link>
   </nav>
   <router-view/>
 </template>

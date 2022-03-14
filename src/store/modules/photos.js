@@ -16,7 +16,7 @@ const actions = {
 
         commit('setPhotos', response.data)
     },
-    async addPhoto({ commit }, {title, url, albumId}) {
+    async addPhoto({ commit }, { title, url, albumId }) {
         const response = await axios.post(
             `https://jsonplaceholder.typicode.com/photos`,
 
@@ -28,12 +28,34 @@ const actions = {
         console.log(response.data)
 
         commit('newPhoto', response.data);
+    },
+    async updatePhoto({ commit }, updPhoto) {
+        const response = await axios.put(
+            `https://jsonplaceholder.typicode.com/photos/${updPhoto.id}`,
+            updPhoto
+        );
+
+        commit('updatePhoto', response.data);
     }
 };
 
 const mutations = {
-    setPhotos: (state, photos) => (state.photos = photos),
-    newPhoto: (state, photo) => state.photos.unshift(photo)
+    setPhotos: (state, photos) => {
+        state.photos = photos.map((photo) => {
+            photo = {...photo, liked: false }
+            return photo
+        })
+    },
+    newPhoto: (state, photo) => {
+        // photo.liked = false
+        state.photos.unshift(photo)
+    },
+    updatePhoto: (state, updPhoto) => {
+        const photoIndex = state.photos.findIndex((photo) => photo.id === updPhoto.id);
+        if (photoIndex !== -1) {
+            state.photos.splice(photoIndex, 1, updPhoto)
+        }
+    }
 };
 
 export default {
