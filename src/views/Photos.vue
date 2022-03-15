@@ -2,11 +2,11 @@
     <div>
         <h3>photos</h3>
         <AddPhoto />
-        <div v-for="(photo, n) in allAlbumPhotos" :key="photo.id">
+        <div v-for="(photo) in allAlbumPhotos" :key="photo.id">
             <article>
                 <img :src="photo.url" width="150" height="150" :alt="photo.title">
                 <div>
-                    <Button :class="[ photo.liked ? likedColor : unlikedColor ]" @click="onLike(photo, n)"><i class="las la-heart"></i></Button>
+                    <Button :class="[ photo.liked ? likedColor : unlikedColor ]" @click="onLike(photo)"><i class="las la-heart"></i></Button>
                 </div>
             </article>
         </div>
@@ -40,20 +40,24 @@ export default {
            this.likedItems.push(photo)
            this.savePhotos();
        },
-       removePhoto(n) {
-        if (n !== -1) {
-            console.log(this.likedItems)
-           this.likedItems.splice(n, 1);
-           console.log(this.likedItems)
-           console.log(n)
-           this.savePhotos();
-        }           
+       removePhoto(id) {
+        // if (n !== -1) {
+        //     console.log(this.likedItems)
+        //    this.likedItems.splice(n, 1);
+        //    console.log(this.likedItems)
+        //    console.log(n)
+        //    this.savePhotos();
+        // }  
+        console.log(this.likedItems)
+        this.likedItems = this.likedItems.filter((likedItem) => likedItem.id !== id)  
+        this.savePhotos();
+        console.log(this.likedItems)       
        },
        savePhotos() {
            const parsed = JSON.stringify(this.likedItems);
            localStorage.setItem('likedItems', parsed);
        },
-       onLike(photo, n) {
+       onLike(photo) {
            const updPhoto = {
                id: photo.id,
                albumId: photo.albumId,
@@ -69,13 +73,13 @@ export default {
                this.addPhoto(updPhoto);
            }
            else if(updPhoto.liked === false) {
-               this.removePhoto(n);
+               this.removePhoto(photo.id);
            }
            console.log(updPhoto.liked)
        }
    },
    created() {
-       this.fetchPhotos(this.albumId);
+           this.fetchPhotos(this.albumId);        
    },
    mounted() {
        if (localStorage.getItem('likedItems')) {
@@ -85,6 +89,23 @@ export default {
                localStorage.removeItem('likedItems');
            }
        }
+       setTimeout(() => {
+                  this.likedItems.forEach((likedItem) => {
+            this.allAlbumPhotos.forEach((allAlbumPhoto) => {
+                if (likedItem.id === allAlbumPhoto.id) {
+                    const updPhoto = {
+                        id: allAlbumPhoto.id,
+                        albumId: allAlbumPhoto.albumId,
+                        title: allAlbumPhoto.title,
+                        url: allAlbumPhoto.url,
+                        thumbnailUrl: allAlbumPhoto.thumbnailUrl,
+                        liked: likedItem.liked
+                    }                    
+                    this.updatePhoto(updPhoto);
+                }
+            })           
+       })
+       }, 800)
    }
 };
 </script>

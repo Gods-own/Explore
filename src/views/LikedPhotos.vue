@@ -1,11 +1,13 @@
 <template>
     <div>
+        <Modal v-show="showModal" @hide-modal="hideModalDiv" />
         <h3>photos</h3>
+        <Button @click="onClear" >Clear All</Button>
         <div v-for="(likedItem, n) in likedItems" :key="likedItem.id">
             <article>
                 <img :src="likedItem.url" width="150" height="150" :alt="likedItem.title">
                 <div>
-                    <Button><i class="las la-trash"></i></Button>
+                    <Button @click="onDelete(likedItem, n)" ><i class="las la-trash"></i></Button>
                 </div>
             </article>
         </div>
@@ -13,15 +15,57 @@
 </template>
 
 <script>
-import Button from '@/components/Button.vue'
+import { mapActions } from 'vuex';
+import Button from '@/components/Button.vue';
+import Modal from '@/components/Modal.vue';
 export default {
     name: "LikedPhotos",
-    components: { Button },
+    components: { Button, Modal },
     data () {
         return {
            likedColor: 'red',
            unlikedColor: 'black',            
-          likedItems: []
+           likedItems: [],
+           showModal: true,           
+        }
+    },
+    methods: {
+       ...mapActions(['updatePhoto']),   
+        hideModalDiv() {
+        this.showModal = false
+        },
+        showModalDiv() {
+        this.showModal = true
+        },            
+        removeItem(n) {
+            if (n !== -1) {
+                this.likedItems.splice(n, 1)
+                this.saveItems();
+            }
+        },
+        clearItems() {
+            this.likedItems = []
+            this.saveItems();
+        },
+        saveItems() {
+            const parsed = JSON.stringify(this.likedItems);
+            localStorage.setItem('likedItems', parsed)
+        },
+        onDelete(likedItem, n) {
+            
+            const updPhoto = {
+                id: likedItem.id,
+               albumId: likedItem.albumId,
+               title: likedItem.title,
+               url: likedItem.url,
+               thumbnailUrl: likedItem.thumbnailUrl,
+               liked: !likedItem.liked                
+            }
+           this.updatePhoto(updPhoto);            
+            this.removeItem(n);
+        },
+        onClear() {
+            this.clearItems();
         }
     },
     mounted () {
@@ -32,7 +76,7 @@ export default {
            } catch(e) {
                localStorage.removeItem('likedItems');
            }
-       }        
+       }   
     }
 }
 </script>
@@ -47,4 +91,5 @@ i {
 .red {
     color: red;
 }
+
 </style>

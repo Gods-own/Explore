@@ -7,6 +7,12 @@
   <router-view/>
 </template>
 
+<script>
+export default {
+  name: 'App'
+}
+</script>
+
 <style>
 @import "https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css";
 #app {

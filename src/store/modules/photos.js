@@ -42,7 +42,7 @@ const actions = {
 const mutations = {
     setPhotos: (state, photos) => {
         state.photos = photos.map((photo) => {
-            photo = {...photo, liked: false }
+            photo.liked = false
             return photo
         })
     },
