@@ -2,12 +2,12 @@
     <div>
         <Modal v-show="showModal" @hide-modal="hideModalDiv" />
         <h3>photos</h3>
-        <Button @click="onClear" >Clear All</Button>
-        <div v-for="(likedItem, n) in likedItems" :key="likedItem.id">
+        <Button @click="clearLikedItems" >Clear All</Button>
+        <div v-for="(likedItem, n) in allLikedItems" :key="likedItem.id">
             <article>
                 <img :src="likedItem.url" width="150" height="150" :alt="likedItem.title">
                 <div>
-                    <Button @click="onDelete(likedItem, n)" ><i class="las la-trash"></i></Button>
+                    <Button @click="showModalDiv(); onDelete(likedItem, n);" ><i class="las la-trash"></i></Button>
                 </div>
             </article>
         </div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Button from '@/components/Button.vue';
 import Modal from '@/components/Modal.vue';
 export default {
@@ -25,58 +25,50 @@ export default {
         return {
            likedColor: 'red',
            unlikedColor: 'black',            
-           likedItems: [],
-           showModal: true,           
+           showModal: false,           
         }
     },
+    computed: mapGetters(['allLikedItems']),
     methods: {
-       ...mapActions(['updatePhoto']),   
+       ...mapActions(['updatePhoto', 'fetchLikedItems', 'fetchLikedPhoto', 'removeLikedItem', 'clearLikedItems']),   
         hideModalDiv() {
         this.showModal = false
         },
         showModalDiv() {
         this.showModal = true
         },            
-        removeItem(n) {
-            if (n !== -1) {
-                this.likedItems.splice(n, 1)
-                this.saveItems();
-            }
-        },
-        clearItems() {
-            this.likedItems = []
-            this.saveItems();
-        },
-        saveItems() {
-            const parsed = JSON.stringify(this.likedItems);
-            localStorage.setItem('likedItems', parsed)
-        },
+        // removeItem(n) {
+        //     this.removeLikedItem(n);
+    
+        // },
+        // clearItems() {
+        //     this.clearLikedItems();
+        // },
+        // saveItems() {
+        //     const parsed = JSON.stringify(this.allLikedItems);
+        //     localStorage.setItem('likedItems', parsed)
+        // },
         onDelete(likedItem, n) {
-            
-            const updPhoto = {
-                id: likedItem.id,
-               albumId: likedItem.albumId,
-               title: likedItem.title,
-               url: likedItem.url,
-               thumbnailUrl: likedItem.thumbnailUrl,
-               liked: !likedItem.liked                
-            }
-           this.updatePhoto(updPhoto);            
-            this.removeItem(n);
+            this.fetchLikedPhoto({ likedPhoto: likedItem, n: n })
+            // this.emitter.emit('delete-photo', { likedItem: likedItem, n: n })
+        //     const updPhoto = {
+        //         id: likedItem.id,
+        //        albumId: likedItem.albumId,
+        //        title: likedItem.title,
+        //        url: likedItem.url,
+        //        thumbnailUrl: likedItem.thumbnailUrl,
+        //        liked: !likedItem.liked                
+        //     }
+        //    this.updatePhoto(updPhoto);            
+        //     this.removeItem(n);
         },
-        onClear() {
-            this.clearItems();
-        }
+        // onClear() {
+        //     this.clearItems();
+        // }
     },
     mounted () {
-       if (localStorage.getItem('likedItems')) {
-           try {
-               this.likedItems = JSON.parse(localStorage.getItem('likedItems'));
-               console.log(this.likedItems)
-           } catch(e) {
-               localStorage.removeItem('likedItems');
-           }
-       }   
+        this.fetchLikedItems()  
+    //    this.emitter.on('delete-photo', this.deleteItem);
     }
 }
 </script>

@@ -6,6 +6,6 @@ import store from './store'
 
 const emitter = mitt();
 
-createApp(App).config.globalProperties.emitter = emitter
+createApp(App).config.globalProperties.emitter = emitter;
 
 createApp(App).use(store).use(router).mount('#app');

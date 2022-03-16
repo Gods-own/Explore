@@ -2,7 +2,7 @@
     <div>
         <h3>photos</h3>
         <AddPhoto />
-        <div v-for="(photo) in allAlbumPhotos" :key="photo.id">
+        <div v-for="(photo) in allAlbumPhotos" :key="photo.id" @click="fetchImage(photo.url)">
             <article>
                 <img :src="photo.url" width="150" height="150" :alt="photo.title">
                 <div>
@@ -17,9 +17,10 @@
 import { mapGetters, mapActions } from 'vuex';
 import AddPhoto from '@/components/AddPhoto.vue'
 import Button from '@/components/Button.vue'
+import Modal from '@/components/Modal.vue'
 export default {
    name: "Photos",
-   components: {AddPhoto, Button},
+   components: {AddPhoto, Button, Modal},
    data() {
        return {
            albumId: this.$route.params.albumId,
@@ -29,34 +30,34 @@ export default {
 
        }
    },
-   computed: mapGetters(['allAlbumPhotos']),
+   computed: mapGetters(['allAlbumPhotos', 'allLikedItems']),
    methods: {
-       ...mapActions(['fetchPhotos', 'updatePhoto']),
-       addPhoto(photo) {
-           if(!photo) {
-               return;
-           }
+       ...mapActions(['fetchPhotos', 'updatePhoto', 'fetchLikedItems', 'removeItemwithId', 'addLikedItem', 'fetchImage']),
+    //    addPhoto(photo) {
+    //        if(!photo) {
+    //            return;
+    //        }
 
-           this.likedItems.push(photo)
-           this.savePhotos();
-       },
-       removePhoto(id) {
-        // if (n !== -1) {
-        //     console.log(this.likedItems)
-        //    this.likedItems.splice(n, 1);
-        //    console.log(this.likedItems)
-        //    console.log(n)
-        //    this.savePhotos();
-        // }  
-        console.log(this.likedItems)
-        this.likedItems = this.likedItems.filter((likedItem) => likedItem.id !== id)  
-        this.savePhotos();
-        console.log(this.likedItems)       
-       },
-       savePhotos() {
-           const parsed = JSON.stringify(this.likedItems);
-           localStorage.setItem('likedItems', parsed);
-       },
+    //        this.likedItems.push(photo)
+    //        this.savePhotos();
+    //    },
+    //    removePhoto(id) {
+    //     if (n !== -1) {
+    //         console.log(this.likedItems)
+    //        this.likedItems.splice(n, 1);
+    //        console.log(this.likedItems)
+    //        console.log(n)
+    //        this.savePhotos();
+    //     }  
+    //     console.log(this.likedItems)
+    //     this.likedItems = this.likedItems.filter((likedItem) => likedItem.id !== id)  
+    //     this.savePhotos();
+    //     console.log(this.likedItems)       
+    //    },
+    //    savePhotos() {
+    //        const parsed = JSON.stringify(this.likedItems);
+    //        localStorage.setItem('likedItems', parsed);
+    //    },
        onLike(photo) {
            const updPhoto = {
                id: photo.id,
@@ -70,10 +71,10 @@ export default {
            this.updatePhoto(updPhoto);
 
            if(updPhoto.liked === true) {
-               this.addPhoto(updPhoto);
+               this.addLikedItem(updPhoto);
            }
            else if(updPhoto.liked === false) {
-               this.removePhoto(photo.id);
+               this.removeItemwithId(photo.id);
            }
            console.log(updPhoto.liked)
        }
@@ -82,15 +83,9 @@ export default {
            this.fetchPhotos(this.albumId);        
    },
    mounted() {
-       if (localStorage.getItem('likedItems')) {
-           try {
-               this.likedItems = JSON.parse(localStorage.getItem('likedItems'));
-           } catch(e) {
-               localStorage.removeItem('likedItems');
-           }
-       }
+        this.fetchLikedItems()
        setTimeout(() => {
-                  this.likedItems.forEach((likedItem) => {
+                  this.allLikedItems.forEach((likedItem) => {
             this.allAlbumPhotos.forEach((allAlbumPhoto) => {
                 if (likedItem.id === allAlbumPhoto.id) {
                     const updPhoto = {
