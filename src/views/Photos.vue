@@ -1,10 +1,13 @@
 <template>
     <div>
+        <Modal v-show="showModal" @hide-modal="hideModalDiv">
+            <DisplayImage />
+        </Modal>
         <h3>photos</h3>
         <AddPhoto />
         <div v-for="(photo) in allAlbumPhotos" :key="photo.id" @click="fetchImage(photo.url)">
             <article>
-                <img :src="photo.url" width="150" height="150" :alt="photo.title">
+                <img :src="photo.url" width="150" height="150" :alt="photo.title" @click="showImage(photo.url)">
                 <div>
                     <Button :class="[ photo.liked ? likedColor : unlikedColor ]" @click="onLike(photo)"><i class="las la-heart"></i></Button>
                 </div>
@@ -18,15 +21,16 @@ import { mapGetters, mapActions } from 'vuex';
 import AddPhoto from '@/components/AddPhoto.vue'
 import Button from '@/components/Button.vue'
 import Modal from '@/components/Modal.vue'
+import DisplayImage from '@/components/DisplayImage.vue'
 export default {
    name: "Photos",
-   components: {AddPhoto, Button, Modal},
+   components: {AddPhoto, Button, Modal, DisplayImage},
    data() {
        return {
            albumId: this.$route.params.albumId,
            likedColor: 'red',
            unlikedColor: 'black',
-           likedItems: [],
+           showModal: false,
 
        }
    },
@@ -58,6 +62,13 @@ export default {
     //        const parsed = JSON.stringify(this.likedItems);
     //        localStorage.setItem('likedItems', parsed);
     //    },
+        hideModalDiv() {
+            this.showModal = false
+        },
+        showModalDiv(e) {
+            e.stopImmediatePropagation()
+            this.showModal = true
+        }, 
        onLike(photo) {
            const updPhoto = {
                id: photo.id,
@@ -77,7 +88,11 @@ export default {
                this.removeItemwithId(photo.id);
            }
            console.log(updPhoto.liked)
-       }
+       },
+       showImage(url) {
+        this.fetchImage(url)
+        this.showModal = true
+     },   
    },
    created() {
            this.fetchPhotos(this.albumId);        

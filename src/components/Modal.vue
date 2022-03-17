@@ -1,11 +1,12 @@
 <template>
     <div class="modal" @click="onClick($event)" >
         <div class="modal-content">
-            <article>
+            <slot></slot>
+            <!-- <article>
                 <p>Are you sure you want to delete this message?</p>
                 <Button @click="onClick($event)" >No</Button>
                 <Button @click="deleteItem($event); onClick($event);" >Yes</Button>
-            </article>
+            </article> -->
         </div>
     </div>
 </template>
@@ -37,24 +38,24 @@ export default {
         //     e.stopImmediatePropagation()
         //     this.$emit('showModal', e)
         // }, 
-        deleteItem(e) {
-            e.stopImmediatePropagation()
+        // deleteItem(e) {
+        //     e.stopImmediatePropagation()
 
-            console.log(this.theLikedItem)
-            const [likedPhoto, n] = this.theLikedItem
-            const updPhoto = {
-               id: likedPhoto.id,
-               albumId: likedPhoto.albumId,
-               title: likedPhoto.title,
-               url: likedPhoto.url,
-               thumbnailUrl: likedPhoto.thumbnailUrl,
-               liked: !likedPhoto.liked                
-            }
-           this.updatePhoto(updPhoto);            
-            this.removeLikedItem(n);            
-            this.$emit('showModal', e)
+        //     console.log(this.theLikedItem)
+        //     const [likedPhoto, n] = this.theLikedItem
+        //     const updPhoto = {
+        //        id: likedPhoto.id,
+        //        albumId: likedPhoto.albumId,
+        //        title: likedPhoto.title,
+        //        url: likedPhoto.url,
+        //        thumbnailUrl: likedPhoto.thumbnailUrl,
+        //        liked: !likedPhoto.liked                
+        //     }
+        //    this.updatePhoto(updPhoto);            
+        //     this.removeLikedItem(n);            
+        //     this.$emit('showModal', e)
 
-        },  
+        // },  
         // deleteItem({ likedItem, n }) {
         //     const updPhoto = {
         //        id: likedItem.id,
