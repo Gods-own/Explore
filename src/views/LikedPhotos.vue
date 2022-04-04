@@ -1,24 +1,27 @@
 <template>
     <div>
         <Modal v-show="showModal" @hide-modal="hideModalDiv">
-            <article v-if="deleteConfirmation">
-                <p>Are you sure you want to delete this message?</p>
-                <Button @click="hideModalDiv()" >No</Button>
-                <Button @click="deleteItem($event); hideModalDiv();" >Yes</Button>
+            <article class="modal-content-component warning-message-modal" v-if="deleteConfirmation">
+                <p>Are you sure you want to delete this picture?</p>
+                <Button class="blackColor me-2 text-white" @click="hideModalDiv()" >No</Button>
+                <Button class="blackColor text-white" @click="deleteItem($event); hideModalDiv();" >Yes</Button>
             </article>
             <DisplayImage v-else-if="imageModal" />
         </Modal>
-        <h3>photos</h3>
-        <Button @click="clearLikedItems" >Clear All</Button>
-        <div v-for="(likedItem, n) in allLikedItems" :key="likedItem.id">
-            <article>
-                <img :src="likedItem.url" width="150" height="150" :alt="likedItem.title"  @click="showImage(likedItem.url)">
-                <div>
+        <Button class="btn my-3 text-white" style="background-color: rgba(31, 133, 81, 0.8)" @click="clearLikedItems" >Clear All</Button>
+        <section class="d-flex flex-wrap justify-content-center ps-4">
+            <div class="card mb-5 me-4" style="width: 18rem;" v-for="(likedItem, n) in allLikedItems" :key="likedItem.id">
+                <img class="card-img-top" :src="likedItem.url" :alt="likedItem.title"  @click="showImage(likedItem.url)">
+                <div class="card-body">
+                    <p class="card-title">{{ likedItem.title }}</p>
+                </div>
+                <div  class="card-footer bg-white">
                     <Button @click="showModalDiv($event); onDelete(likedItem, n, $event);" ><i class="las la-trash"></i></Button>
                 </div>
-            </article>
-        </div>
+            </div>
+        </section>
     </div>
+
 </template>
 
 <script>

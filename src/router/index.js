@@ -1,17 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import Users from '../views/Users.vue'
 import Albums from '../views/Albums.vue'
 import Photos from '../views/Photos.vue'
 import LikedPhotos from '../views/LikedPhotos.vue'
+import NotFound from '../views/NotFound.vue'
 
-const routes = [{
-        path: '/',
-        name: 'Home',
-        component: HomeView
-    },
+const routes = [
     {
-        path: '/users',
+        path: '/',
         name: 'Users',
         component: Users
     },
@@ -29,6 +25,11 @@ const routes = [{
         path: '/favourite-photos',
         name: 'FavouritePhotos',
         component: LikedPhotos
+    },
+    {
+        path: '/:catchAll(.*)',
+        name: 'NotFound',
+        component: NotFound
     }
 ]
 

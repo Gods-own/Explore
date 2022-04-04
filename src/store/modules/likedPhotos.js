@@ -59,7 +59,7 @@ const mutations = {
         localStorage.setItem('likedItems', parsed)
     },
     newLikedItem: (state, likedPhoto) => {
-        state.likedItems.push(likedPhoto)
+        state.likedItems.unshift(likedPhoto)
         const parsed = JSON.stringify(state.likedItems);
         localStorage.setItem('likedItems', parsed)
     },

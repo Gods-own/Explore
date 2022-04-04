@@ -1,5 +1,18 @@
 <template>
-    <div>
+<form @submit="onSubmit" class="my-3 form mx-auto">
+  <div class="mb-3">
+    <label for="photoUrl" class="form-label">Photo url</label>
+    <input type="url" class="form-control" id="photoUrl" v-model="photoUrl">
+  </div>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input type="text" class="form-control" id="title" v-model="title">
+  </div>
+  <div class="text-center btn-div">
+      <button type="submit" class="btn btn-primary">Submit</button>
+ </div>
+</form>
+    <!-- <div>
         <form @submit="onSubmit">
             <div>
                 <label>Photo url</label>
@@ -11,7 +24,7 @@
             </div>
             <button>Submit</button>            
         </form>
-    </div>
+    </div> -->
 </template>
 
 <script>

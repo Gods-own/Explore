@@ -1,5 +1,6 @@
 <template>
-    <table>
+    <div class="table-responsive">
+        <table class="table">
         <thead>
             <tr>
             <slot name="thead"></slot>
@@ -9,6 +10,7 @@
             <slot name="tbody"></slot>
         </tbody>
     </table>
+    </div>
 </template>
 
 <script>

@@ -3,16 +3,26 @@
         <Modal v-show="showModal" @hide-modal="hideModalDiv">
             <DisplayImage />
         </Modal>
-        <h3>photos</h3>
         <AddPhoto />
-        <div v-for="(photo) in allAlbumPhotos" :key="photo.id" @click="fetchImage(photo.url)">
-            <article>
+        <section class="d-flex flex-wrap justify-content-center ps-4">
+            <div class="card mb-5 me-4" style="width: 18rem;" v-for="(photo) in allAlbumPhotos" :key="photo.id" @click="fetchImage(photo.url)">
+            <!-- <div style="width: 18rem;"> -->
+                <img class="card-img-top" :src="photo.url" :alt="photo.title" @click="showImage(photo.url)">
+                <div class="card-body">
+                    <p class="card-title">{{ photo.title }}</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <Button :class="[ photo.liked ? likedColor : unlikedColor ]" @click="onLike(photo)"><i class="las la-heart"></i></Button>
+                </div>
+            </div>
+            <!-- </div> -->
+        </section>
+            <!-- <article>
                 <img :src="photo.url" width="150" height="150" :alt="photo.title" @click="showImage(photo.url)">
                 <div>
                     <Button :class="[ photo.liked ? likedColor : unlikedColor ]" @click="onLike(photo)"><i class="las la-heart"></i></Button>
                 </div>
-            </article>
-        </div>
+            </article> -->
     </div>
 </template>
 
@@ -90,6 +100,7 @@ export default {
            console.log(updPhoto.liked)
        },
        showImage(url) {
+        console.log(url)
         this.fetchImage(url)
         this.showModal = true
      },   

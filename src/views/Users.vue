@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <h3>Users</h3>
+    <div class="mt-4">
         <Table>
             <template #thead>
                 <th>Name</th>
@@ -11,14 +10,14 @@
             </template>
             <template #tbody>
                 <tr v-for="user in allUsers" :key="user.id">
-                    <td>{{user.name}}</td>
-                    <td>{{user.email}}</td>
-                    <td>{{user.phone}}</td>
-                    <td>{{user.company.name}}</td>
-                    <td>{{user.website}}</td>
+                    <td data-label="Name">{{user.name}}</td>
+                    <td data-label="Email">{{user.email}}</td>
+                    <td data-label="PhoneNumber">{{user.phone}}</td>
+                    <td data-label="Company Name">{{user.company.name}}</td>
+                    <td data-label="Website">{{user.website}}</td>
                     <td>
-                        <Button>
-                            <router-link :to="{ name: 'UserAlbums', params: { userId: user.id } }">View Album</router-link>
+                        <Button class="greenColor">
+                            <router-link class="text-white text-decoration-none" :to="{ name: 'UserAlbums', params: { userId: user.id } }">View Album</router-link>
                         </Button>
                     </td>
                 </tr>

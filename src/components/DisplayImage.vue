@@ -1,7 +1,5 @@
 <template>
-    <article>
-        <img :src="clickedImage" width="300" height="300">
-    </article>
+        <img class="modal-content-component image-modal" :src="clickedImage">
 </template>
 
 <script>
@@ -11,3 +9,9 @@ export default {
     computed: mapGetters(['clickedImage'])
 }
 </script>
+
+<style scoped>
+img{
+    width: 100%;
+}
+</style>
